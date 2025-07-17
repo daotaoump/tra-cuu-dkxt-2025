@@ -494,7 +494,8 @@
                         document.getElementById("noResults").style.display = "block";
                     } else {
                         // Hiển thị thông tin thí sinh
-                        const student = data[0];
+                        const student = data[1];
+                        document.getElementById("cccd").textContent = student.cccd || "--";
                         document.getElementById("hoTen").textContent = student.hoTen || "--";
                         document.getElementById("ngaySinh").textContent = student.ngaySinh || "--";
                         document.getElementById("sdt").textContent = student.sdt || "--";
@@ -510,7 +511,7 @@
                             // Xác định trạng thái - CẬP NHẬT THEO YÊU CẦU
                           let statusText = "Đang xử lý";
                             let statusClass = "status-missing";
-                            if (method.trangThai && method.trangThai.includes("Đã nhận")) {
+                            if (method.trangThai && method.trangThai.includes("Đã tiếp nhận")) {
                                 statusText = "Đã tiếp nhận hồ sơ";
                                 statusClass = "status-received";
                             } else if (method.trangThai && method.trangThai.includes("thiếu")) {
