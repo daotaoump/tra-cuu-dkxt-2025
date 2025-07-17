@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Tra Cứu Thí Sinh - ĐH Y Dược, ĐHQGHN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a365c, #8e1e2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .university-header {
+            background: #0c3264;
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .university-header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            right: 5%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffffff, transparent);
+        }
+        
+        .university-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .university-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+        
+        .system-title {
+            background: #1a4d8c;
+            color: white;
+            padding: 18px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .search-section {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .search-box {
+            display: flex;
+            margin: 0 auto;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 16px 25px;
+            border: none;
+            font-size: 1.1rem;
+            outline: none;
+            background: #fff;
+        }
+        
+        .search-box button {
+            background: #e63946;
+            color: white;
+            border: none;
+            padding: 0 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .search-box button:hover {
+            background: #c1121f;
+        }
+        
+        .search-box button i {
+            margin-right: 8px;
+        }
+        
+        .instructions {
+            text-align: center;
+            margin-top: 15px;
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .results-section {
+            padding: 30px;
+            display: none;
+        }
+        
+        .results-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .results-header h2 {
+            color: #1a4d8c;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #1a4d8c, transparent);
+            margin: 20px auto;
+            width: 80%;
+        }
+        
+        .student-info {
+            background: #f0f7ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-item i {
+            font-size: 1.3rem;
+            color: #1a4d8c;
+            width: 35px;
+        }
+        
+        .info-content h3 {
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .info-content p {
+            font-size: 1.15rem;
+            font-weight: 500;
+            color: #222;
+        }
+        
+        .methods-section h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0c3264;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .methods-table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .methods-table thead {
+            background: #0c3264;
+            color: white;
+        }
+        
+        .methods-table th {
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .methods-table tbody tr {
+            border-bottom: 1px solid #eee;
+        }
+        
+        .methods-table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .methods-table td {
+            padding: 14px 20px;
+        }
+        
+        .status-received {
+            background: #38a169;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            display: inline-block;
+            font-weight: 500;
+        }
+        
+        .status-missing {
+            background: #dd6b20;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            display: inline-block;
+            font-weight: 500;
+        }
+        
+        .status-rejected {
+            background: #e53e3e;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            display: inline-block;
+            font-weight: 500;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px 30px;
+            background: #fff8e1;
+            border-radius: 10px;
+            border-left: 5px solid #ffc107;
+            display: none;
+            margin: 20px 0;
+        }
+        
+        .no-results i {
+            font-size: 2.5rem;
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
+        
+        .no-results h3 {
+            color: #e65100;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .no-results p {
+            color: #666;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 30px;
+            display: none;
+        }
+        
+        .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #1a4d8c;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #e6f7ff;
+            color: #2b6cb0;
+            font-size: 0.95rem;
+            border-top: 1px solid #bee3f8;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        
+        .contact-item i {
+            color: #2b6cb0;
+        }
+        
+        @media (max-width: 768px) {
+            .search-box {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+            
+            .search-box input, .search-box button {
+                width: 100%;
+                border-radius: 0;
+                padding: 15px;
+            }
+            
+            .student-info {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 20px;
+            }
+            
+            .methods-table {
+                font-size: 0.9rem;
+            }
+            
+            .methods-table th,
+            .methods-table td {
+                padding: 12px 15px;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="university-header">
+            <h1>TRƯỜNG ĐẠI HỌC Y DƯỢC</h1>
+            <h2>ĐẠI HỌC QUỐC GIA HÀ NỘI</h2>
+        </div>
+        
+        <div class="system-title">
+            HỆ THỐNG TRA CỨU THÔNG TIN THÍ SINH
+        </div>
+        
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" id="cccd" placeholder="Nhập số căn cước công dân (CCCD)...">
+                <button onclick="traCuu()">
+                    <i class="fas fa-search"></i> Tra Cứu
+                </button>
+            </div>
+            <p class="instructions">
+                <i class="fas fa-info-circle"></i> Vui lòng nhập chính xác số CCCD 12 số để tra cứu thông tin
+            </p>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Đang tìm kiếm thông tin, vui lòng chờ...</p>
+        </div>
+        
+        <div class="results-section" id="resultsSection">
+            <div class="results-header">
+                <h2>KẾT QUẢ TRA CỨU</h2>
+                <div class="divider"></div>
+            </div>
+            
+            <div class="student-info" id="studentInfo">
+                <div class="info-item">
+                    <i class="fas fa-user"></i>
+                    <div class="info-content">
+                        <h3>HỌ VÀ TÊN</h3>
+                        <p id="hoTen">--</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-birthday-cake"></i>
+                    <div class="info-content">
+                        <h3>NGÀY SINH</h3>
+                        <p id="ngaySinh">--</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-phone"></i>
+                    <div class="info-content">
+                        <h3>SỐ ĐIỆN THOẠI</h3>
+                        <p id="sdt">--</p>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-school"></i>
+                    <div class="info-content">
+                        <h3>TRƯỜNG THPT</h3>
+                        <p id="truongTN">--</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="methods-section">
+                <h3>PHƯƠNG THỨC XÉT TUYỂN ĐÃ ĐĂNG KÝ</h3>
+                <table class="methods-table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã PTXT</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody id="methodsBody">
+                        <!-- Dữ liệu sẽ được thêm tại đây -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="no-results" id="noResults">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Không tìm thấy thông tin thí sinh</h3>
+            <p>Vui lòng kiểm tra lại số CCCD hoặc liên hệ bộ phận tuyển sinh</p>
+            <p>Hotline: 84 243 7450 188</p>
+        </div>
+        
+        <footer>
+            <p>Hệ thống quản lý thí sinh © 2023 - Trường Đại học Y Dược, ĐHQGHN</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>Hotline hỗ trợ: 84 243 7450 188</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email: daotao.ump@gmail.com</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // THAY THẾ URL SAU BẰNG URL WEB APP CỦA BẠN
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzkrUYcFHcetNMUg3OOZwx760M0XjIWXZ058_NndSolS11PNhR5McAXIhLjA7ZIFdb3/exec";
+        
+        function traCuu() {
+            const cccd = document.getElementById("cccd").value.trim();
+            if (!cccd) {
+                alert("Vui lòng nhập số CCCD trước khi tra cứu!");
+                return;
+            }
+            
+            // Hiển thị loading, ẩn các phần khác
+            document.getElementById("loading").style.display = "block";
+            document.getElementById("resultsSection").style.display = "none";
+            document.getElementById("noResults").style.display = "none";
+            
+            // Thực hiện gọi API đến Google Apps Script
+            fetch(`${WEB_APP_URL}?cccd=${encodeURIComponent(cccd)}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Ẩn loading
+                    document.getElementById("loading").style.display = "none";
+                    
+                    // Xử lý kết quả
+                    if (data.error) {
+                        document.getElementById("noResults").style.display = "block";
+                    } else {
+                        // Hiển thị thông tin thí sinh
+                        const student = data[0];
+                        document.getElementById("hoTen").textContent = student.hoTen || "--";
+                        document.getElementById("ngaySinh").textContent = student.ngaySinh || "--";
+                        document.getElementById("sdt").textContent = student.sdt || "--";
+                        document.getElementById("truongTN").textContent = student.truongTN || "--";
+                        
+                        // Hiển thị các phương thức xét tuyển
+                        const methodsBody = document.getElementById("methodsBody");
+                        methodsBody.innerHTML = "";
+                        
+                        data.forEach((method, index) => {
+                            const row = document.createElement("tr");
+                            
+                            // Xác định trạng thái - CẬP NHẬT THEO YÊU CẦU
+                           if (method.trangThai && method.trangThai.includes("Đã tiếp nhận")) {
+    				const row = document.createElement("tr");
+    				row.innerHTML = `
+        			<td>${index + 1}</td>
+        			<td><strong>${method.maPTXT || "--"}</strong></td>
+        			<td><span class="status-received">Đã tiếp nhận hồ sơ</span></td>
+    				`;
+    				methodsBody.appendChild(row);
+				}
+                        
+                            row.innerHTML = `
+                                <td>${index + 1}</td>
+                                <td><strong>${method.maPTXT || "--"}</strong></td>
+                                <td><span class="${statusClass}">${statusText}</span></td>
+                            `;
+                            methodsBody.appendChild(row);
+                        });
+                        
+                        document.getElementById("resultsSection").style.display = "block";
+                    }
+                })
+                .catch(error => {
+                    console.error("Lỗi kết nối:", error);
+                    document.getElementById("loading").style.display = "none";
+                    document.getElementById("noResults").style.display = "block";
+                });
+        }
+        
+        // Cho phép nhấn Enter để tra cứu
+        document.getElementById("cccd").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                traCuu();
+            }
+        });
+    </script>
+</body>
+</html>
