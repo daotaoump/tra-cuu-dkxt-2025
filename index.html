@@ -508,16 +508,18 @@
                             const row = document.createElement("tr");
                             
                             // Xác định trạng thái - CẬP NHẬT THEO YÊU CẦU
-                           if (method.trangThai && method.trangThai.includes("Đã tiếp nhận")) {
-    				const row = document.createElement("tr");
-    				row.innerHTML = `
-        			<td>${index + 1}</td>
-        			<td><strong>${method.maPTXT || "--"}</strong></td>
-        			<td><span class="status-received">Đã tiếp nhận hồ sơ</span></td>
-    				`;
-    				methodsBody.appendChild(row);
-				}
-                        
+                          let statusText = "Đang xử lý";
+                            let statusClass = "status-missing";
+                            if (method.trangThai && method.trangThai.includes("Đã tiếp nhận")) {
+                                statusText = "Đã tiếp nhận hồ sơ";
+                                statusClass = "status-received";
+                            } else if (method.trangThai && method.trangThai.includes("thiếu")) {
+                                statusText = "Hồ sơ thiếu";
+                                statusClass = "status-missing";
+                            } else if (method.trangThai && method.trangThai.includes("không đủ")) {
+                                statusText = "Hồ sơ không đủ điều kiện xét tuyển";
+                                statusClass = "status-rejected";
+                            }
                             row.innerHTML = `
                                 <td>${index + 1}</td>
                                 <td><strong>${method.maPTXT || "--"}</strong></td>
